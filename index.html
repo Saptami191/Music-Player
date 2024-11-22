@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Player</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/8779f69fd0.js" crossorigin="anonymous"></script>
+</head>
+<body>
+   <div class="container">
+   <div class="musicplayer">
+   <nav>
+    <div class="circle">
+        <i class="fa-solid fa-backward" onclick="prevSong()"></i>
+    </div>
+    <div class="circle">
+        <i class="fa-solid fa-bars"></i>
+    </div>
+   </nav>
+   <img src="image1.jpg" id="songImage" class="song-i">
+   <h1 id="songTitle">Faded</h1>
+   <p id="songArtist">Alan Walker Ft.</p>
+   <audio id="song" controls>
+      <source id="songSource" src="musicmusic.mp3">
+   </audio>
+   <input type="range" value="0" id="progress">
+   <div class="controls">
+    <div><i class="fa-solid fa-backward" onclick="prevSong()"></i></div>
+    <div onclick="playPause()"><i class="fa-solid fa-play" id="ctrlIcon"></i></div>
+    <div><i class="fa-solid fa-forward" onclick="nextSong()"></i></div>
+   </div>
+</div>
+</div>
+    <script>
+        let progress = document.getElementById("progress");
+        let song = document.getElementById("song");
+        let ctrlIcon = document.getElementById("ctrlIcon");
+        let songSource = document.getElementById("songSource");
+        let songTitle = document.getElementById("songTitle");
+        let songArtist = document.getElementById("songArtist");
+        let songImage = document.getElementById("songImage");
+
+        // Playlist array with song information
+        let playlist = [
+            { title: "Faded", artist: "Alan Walker Ft.", src: "musicmusic.mp3", image: "image1.jpg" },
+            { title: "Shape of You", artist: "Ed Sheeran", src: "shapeofyou.mp3", image: "image2.jpg" },
+            { title: "Blinding Lights", artist: "The Weeknd", src: "blindinglights.mp3", image: "image3.jpg" }
+        ];
+
+        let currentSongIndex = 0;
+
+        // Load song metadata
+        function loadSong(index) {
+            songSource.src = playlist[index].src;
+            songTitle.innerText = playlist[index].title;
+            songArtist.innerText = playlist[index].artist;
+            songImage.src = playlist[index].image;
+            song.load();
+            playPause();  // Play the loaded song automatically
+        }
+
+        song.onloadedmetadata = function() {
+            progress.max = song.duration;
+            progress.value = song.currentTime;
+        }
+
+        function playPause() {
+            if (ctrlIcon.classList.contains("fa-pause")) {
+                song.pause();
+                ctrlIcon.classList.remove("fa-pause");
+                ctrlIcon.classList.add("fa-play");
+            } else {
+                song.play();
+                ctrlIcon.classList.add("fa-pause");
+                ctrlIcon.classList.remove("fa-play");
+            }
+        }
+
+        function nextSong() {
+            currentSongIndex = (currentSongIndex + 1) % playlist.length;
+            loadSong(currentSongIndex);
+        }
+
+        function prevSong() {
+            currentSongIndex = (currentSongIndex - 1 + playlist.length) % playlist.length;
+            loadSong(currentSongIndex);
+        }
+
+        // Load the first song when the page loads
+        loadSong(currentSongIndex);
+    </script>
+</body>
+</html>
+
+
